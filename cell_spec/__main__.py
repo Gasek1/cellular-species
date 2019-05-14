@@ -1,5 +1,5 @@
-from cellular_automata import CellGrid
-from agents import Agent
+from cell_spec.cellular_automata import CellGrid
+from cell_spec.agents import Agent
 
 grid = CellGrid(10, 10)
 start_cell = grid.cells[5][5]

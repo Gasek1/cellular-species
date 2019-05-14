@@ -1,7 +1,6 @@
 from random import choice
 
-from cellular_automata import Cell
-
+from cell_spec.cellular_automata import Cell
 
 class Agent:
     def __init__(self, name: str, cell: set):
