@@ -1,9 +1,8 @@
 class Cell:
     """A cell with properties that holds references to its neighbours and agents it contains."""
 
-    def __init__(self, neighbours: set = None, properties: dict = None, agents: list = None):
+    def __init__(self, neighbours: set = None, agents: list = None):
         self.neighbours = set() if neighbours is None else neighbours
-        self.properties = {} if properties is None else properties
         self.agents = [] if agents is None else agents
 
     def get_neighbourhood(self, radius: int = 1):
@@ -14,10 +13,10 @@ class Cell:
         if radius > 1:
             # Recursively get neighbours of neighbours.
             for neighbour in self.neighbours:
-                result.union(neighbour.get_neighbourhood(radius - 1))
+                result |= neighbour.get_neighbourhood(radius - 1)
         return result
 
-    def get_distance(self, other: Cell):
+    def get_distance(self, other):
         """Return the distance between two cells."""
         if self == other:
             return 0
@@ -48,18 +47,16 @@ class CellGrid:
         self.rows = rows
         self.columns = columns
         # Initialize cell array.
-        self.cells = [[Cell()] * columns] * rows
+        self.cells = [[Cell() for _ in range(self.columns)] for _ in range(self.rows)]
         # Add neighouring cells with periodic boundaries.
         for i, row in enumerate(self.cells):
             for j, cell in enumerate(row):
-                cell.neighbours.union(
-                    {
-                        self.cells[i - 1 % rows - 1][j],
-                        self.cells[i + 1 % rows - 1][j],
-                        self.cells[i][j - 1 % columns - 1],
-                        self.cells[i][j + 1 % columns - 1],
-                    }
-                )
+                cell.neighbours |= {
+                    self.cells[(i - 1) % (rows - 1)][j],
+                    self.cells[(i + 1) % (rows - 1)][j],
+                    self.cells[i][(j - 1) % (columns - 1)],
+                    self.cells[i][(j + 1) % (columns - 1)],
+                }
 
     def moore_neighbourhood(self, grid_position: tuple, radius: int):
         # I don't quite understand what this method does?
@@ -74,11 +71,14 @@ class CellGrid:
         pass
 
     def __str__(self):
-        output = self.columns * " __" + "\n"
-        for _ in range(self.rows):
-            for i in range(self.columns):
-                output += "|__"
-                if i == self.columns - 1:
+        output = self.columns * " ___" + "\n"
+        for i in range(self.rows):
+            for j in range(self.columns):
+                filling = "_"
+                if self.cells[i][j].agents:
+                    filling = "§"
+                output += "|_" + filling + "_"
+                if j == self.columns - 1:
                     output += "|"
             output += "\n"
         return output
