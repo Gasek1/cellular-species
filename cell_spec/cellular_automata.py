@@ -1,5 +1,5 @@
 class Cell:
-    """A cell with properties that holds references to its neighbours and agents it contains."""
+    """A cell that holds references to its neighbours and the agents it contains."""
 
     def __init__(self, neighbours: set = None, agents: list = None):
         self.neighbours = set() if neighbours is None else neighbours
@@ -16,16 +16,17 @@ class Cell:
                 result |= neighbour.get_neighbourhood(radius - 1)
         return result - {self}
 
-    def get_distance(self, other):
+    def get_distance(self, other, max_distance):
         """Return the distance between two cells."""
         if self == other:
             return 0
+        # Iteratively check larger neighbourhoods, until other is in it
         distance = 1
         while True:
             if other in self.get_neighbourhood(distance):
                 return distance
             distance += 1
-            if distance > 10:
+            if distance > max_distance:
                 break
 
     def get_perimeter(self, radius: int = 1):
@@ -63,6 +64,15 @@ class CellGrid:
                 }
 
     def __getitem__(self, index):
+        """Allow to access cells in a CellGrid directly.
+
+        This 'magic method' allows to access a cell like this:
+        `cell_grid[i][j]` or this `cell_grid[i, j]` instead of
+        only like this: `cell_grid.cells[i][j]`.
+
+        """
+        if isinstance(index, (tuple, list)) and len(index) == 2:
+            return self.cells[index[0]][index[1]]
         return self.cells[index]
 
     def moore_neighbourhood(self, grid_position: tuple, radius: int):
@@ -71,6 +81,7 @@ class CellGrid:
         u = [grid_position[0] - radius, grid_position[1] - radius]
         for i in range(2 * radius + 1):
             for j in range(2 * radius + 1):
+                # This does not make much sense, since u is a list and i and j are integers
                 result.append([u + i, u + j])
         return result
 

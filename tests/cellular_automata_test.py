@@ -21,5 +21,5 @@ class TestCells:
         }
 
     def test_get_distance(self):
-        assert self.grid[2][1].get_distance(self.grid[2][5]) == 4
-        assert self.grid[2][1].get_distance(self.grid[2][9]) == 2 # periodic
+        assert self.grid[2][1].get_distance(self.grid[2][5], 10) == 4
+        assert self.grid[2][1].get_distance(self.grid[2][9], 10) == 2 # periodic
