@@ -67,13 +67,19 @@ class CellGrid:
         """Allow to access cells in a CellGrid directly.
 
         This 'magic method' allows to access a cell like this:
-        `cell_grid[i][j]` or this `cell_grid[i, j]` instead of
+        `cell_grid[i][j]` or this `cell_grid[j, i]` instead of
         only like this: `cell_grid.cells[i][j]`.
 
         """
         if isinstance(index, (tuple, list)) and len(index) == 2:
-            return self.cells[index[0]][index[1]]
+            return self.cells[index[1]][index[0]]
         return self.cells[index]
+
+    def get_position(self, cell):
+        """Return the position of a cell in the grid."""
+        for i, row in enumerate(self.cells):
+            if cell in row:
+                return row.index(cell), i
 
     def moore_neighbourhood(self, grid_position: tuple, radius: int):
         # I don't quite understand what this method does?
