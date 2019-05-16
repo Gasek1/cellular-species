@@ -95,13 +95,17 @@ class CellGrid:
         pass
 
     def __str__(self):
-        output = self.columns * " ___" + "\n"
+        output = self.columns * " __" + "\n"
         for i in range(self.rows):
             for j in range(self.columns):
-                filling = "_"
-                if self.cells[i][j].agents:
-                    filling = "§"
-                output += "|_" + filling + "_"
+                filling = "__"
+                if len(self.cells[i][j].agents) == 1:
+                    filling = "_§"
+                elif len(self.cells[i][j].agents) == 2:
+                    filling = "§§"
+                elif len(self.cells[i][j].agents) > 2:
+                    filling = "++"
+                output += "|" + filling
                 if j == self.columns - 1:
                     output += "|"
             output += "\n"
