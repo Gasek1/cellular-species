@@ -1,3 +1,6 @@
+"""Create a Grid of Cells for a cellular automaton."""
+
+
 class Cell:
     """A cell that holds references to its neighbours and the agents it contains."""
 
@@ -80,9 +83,12 @@ class CellGrid:
         for i, row in enumerate(self.cells):
             if cell in row:
                 return row.index(cell), i
+        if not isinstance(cell, Cell):
+            raise TypeError(f"Argument should be of type 'Cell', not '{cell.__class__.__name__}'.")
+        raise ValueError("The given cell is not a part of the grid.")
 
-    def moore_neighbourhood(self, grid_position: tuple, radius: int):
-        # I don't quite understand what this method does?
+    def moore_neighbourhood(self, grid_position: tuple, radius: int) -> list:
+        """I don't quite understand what this method does?"""
         result = []
         u = [grid_position[0] - radius, grid_position[1] - radius]
         for i in range(2 * radius + 1):
@@ -92,9 +98,11 @@ class CellGrid:
         return result
 
     def von_neumann_neighbourhood(self, radius: int):
-        pass
+        """Missing implementation."""
+        raise NotImplementedError
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Generate an ASCII represenation of the grid and agents in it."""
         output = self.columns * " __" + "\n"
         for i in range(self.rows):
             for j in range(self.columns):

@@ -1,3 +1,5 @@
+"""Simulate an example ecosystem."""
+
 from cell_spec.ecosystem import Ecosystem
 
 ecosystem = Ecosystem(10, 10, 5)

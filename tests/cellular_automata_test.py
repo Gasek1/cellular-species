@@ -1,4 +1,4 @@
-from cell_spec.cellular_automata import Cell, CellGrid
+from cell_spec.cells import Cell, CellGrid
 
 class TestCells:
 

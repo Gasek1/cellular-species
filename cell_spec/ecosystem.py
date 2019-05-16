@@ -2,7 +2,7 @@
 
 from random import randint
 
-from cell_spec.cellular_automata import CellGrid
+from cell_spec.cells import CellGrid
 from cell_spec.agents import Agent
 from cell_spec.animal_generator import generate_name
 
