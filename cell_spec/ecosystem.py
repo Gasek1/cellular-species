@@ -6,31 +6,33 @@ from cell_spec.cellular_automata import CellGrid
 from cell_spec.agents import Agent
 from cell_spec.animal_generator import generate_name
 
+
 class Specimen(Agent):
     """A type of agent that represents a species of animals in an ecosystem."""
 
-    def take_turn(self):
+    def take_turn(self) -> None:
         """Perform the action for a time step."""
         self.move()
+
 
 class Ecosystem:
     """Assemble a CellGrid to represent a biosphere and spawn specimens in it."""
 
-    def __init__(self, x_size, y_size, population):
+    def __init__(self, x_size: int, y_size: int, population: int):
         self.grid = CellGrid(y_size, x_size)
         self.animals = []
         for _ in range(population):
-            position = (randint(0, x_size-1), randint(0, y_size-1))
+            position = (randint(0, x_size - 1), randint(0, y_size - 1))
             self.spawn_specimen(position)
 
-    def spawn_specimen(self, position):
+    def spawn_specimen(self, position: tuple) -> None:
         """Create a new specimen and place it in the ecosystem."""
         cell = self.grid[position]
         specimen = Specimen(generate_name(3), cell)
         cell.agents.append(specimen)
         self.animals.append(specimen)
 
-    def time_step(self):
+    def time_step(self) -> None:
         """Progress one step in time."""
         for animal in self.animals:
             # We could come up with some initiative system here.

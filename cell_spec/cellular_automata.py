@@ -5,7 +5,7 @@ class Cell:
         self.neighbours = set() if neighbours is None else neighbours
         self.agents = [] if agents is None else agents
 
-    def get_neighbourhood(self, radius: int = 1):
+    def get_neighbourhood(self, radius: int = 1) -> set:
         """Return all cells within a given radius."""
         if radius == 0:
             return set()
@@ -16,7 +16,7 @@ class Cell:
                 result |= neighbour.get_neighbourhood(radius - 1)
         return result - {self}
 
-    def get_distance(self, other, max_distance):
+    def get_distance(self, other, max_distance) -> int:
         """Return the distance between two cells."""
         if self == other:
             return 0
@@ -29,11 +29,11 @@ class Cell:
             if distance > max_distance:
                 break
 
-    def get_perimeter(self, radius: int = 1):
+    def get_perimeter(self, radius: int = 1) -> set:
         """Return all cells at a given distance to self."""
         return self.get_neighbourhood(radius) - self.get_neighbourhood(radius - 1)
 
-    def get_shortest_path(self, other):
+    def get_shortest_path(self, other: "Cell") -> set:
         """Return the smallest set of neighbouring cells including both self and other."""
         result = {self, other}
         if other in self.neighbours:
@@ -75,7 +75,7 @@ class CellGrid:
             return self.cells[index[1]][index[0]]
         return self.cells[index]
 
-    def get_position(self, cell):
+    def get_position(self, cell) -> tuple:
         """Return the position of a cell in the grid."""
         for i, row in enumerate(self.cells):
             if cell in row:

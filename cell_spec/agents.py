@@ -4,11 +4,11 @@ from cell_spec.cellular_automata import Cell
 
 
 class Agent:
-    def __init__(self, name: str, cell: set):
+    def __init__(self, name: str, cell: Cell):
         self.name = name
         self.cell = cell
 
-    def move(self):
+    def move(self) -> None:
         destination = choice(tuple(self.cell.get_neighbourhood()))
         destination.agents.append(self)
         self.cell.agents.remove(self)
