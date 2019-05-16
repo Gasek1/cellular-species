@@ -14,15 +14,19 @@ class Cell:
             # Recursively get neighbours of neighbours.
             for neighbour in self.neighbours:
                 result |= neighbour.get_neighbourhood(radius - 1)
-        return result
+        return result - {self}
 
     def get_distance(self, other):
         """Return the distance between two cells."""
         if self == other:
             return 0
-        if other in self.neighbours:
-            return 1
-        return 1 + min((neighbour.get_distance(other) for neighbour in self.neighbours))
+        distance = 1
+        while True:
+            if other in self.get_neighbourhood(distance):
+                return distance
+            distance += 1
+            if distance > 10:
+                break
 
     def get_perimeter(self, radius: int = 1):
         """Return all cells at a given distance to self."""
@@ -52,11 +56,14 @@ class CellGrid:
         for i, row in enumerate(self.cells):
             for j, cell in enumerate(row):
                 cell.neighbours |= {
-                    self.cells[(i - 1) % (rows - 1)][j],
-                    self.cells[(i + 1) % (rows - 1)][j],
-                    self.cells[i][(j - 1) % (columns - 1)],
-                    self.cells[i][(j + 1) % (columns - 1)],
+                    self.cells[(i - 1) % rows][j],
+                    self.cells[(i + 1) % rows][j],
+                    self.cells[i][(j - 1) % columns],
+                    self.cells[i][(j + 1) % columns],
                 }
+
+    def __getitem__(self, index):
+        return self.cells[index]
 
     def moore_neighbourhood(self, grid_position: tuple, radius: int):
         # I don't quite understand what this method does?

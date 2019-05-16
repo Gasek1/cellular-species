@@ -2,6 +2,7 @@ from random import choice
 
 from cell_spec.cellular_automata import Cell
 
+
 class Agent:
     def __init__(self, name: str, cell: set):
         self.name = name
